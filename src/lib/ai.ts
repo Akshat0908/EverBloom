@@ -1,4 +1,4 @@
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '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';
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 interface AIResponse {
@@ -16,7 +16,7 @@ export async function callAI(prompt: string, systemPrompt?: string): Promise<str
       headers: {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://everbloom.app',
+        'HTTP-Referer': window.location.origin,
         'X-Title': 'EverBloom - AI Relationship Nurturer',
       },
       body: JSON.stringify({
@@ -31,13 +31,14 @@ export async function callAI(prompt: string, systemPrompt?: string): Promise<str
     });
 
     if (!response.ok) {
-      throw new Error(`AI API error: ${response.statusText}`);
+      console.warn(`AI API error: ${response.statusText}, falling back to local responses`);
+      return getFallbackResponse(prompt);
     }
 
     const data: AIResponse = await response.json();
     return data.choices[0]?.message?.content || getFallbackResponse(prompt);
   } catch (error) {
-    console.error('AI API Error:', error);
+    console.warn('AI API Error, using fallback:', error);
     return getFallbackResponse(prompt);
   }
 }

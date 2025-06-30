@@ -42,12 +42,13 @@ export default function SplineScene({ className = "", fallbackHeight = "400px" }
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    // Show fallback after 3 seconds to prevent long loading
+    // Show fallback after 2 seconds to prevent long loading on slow connections
     const timer = setTimeout(() => {
       if (isLoading) {
         setShowFallback(true);
+        setIsLoading(false);
       }
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [isLoading]);
@@ -58,6 +59,7 @@ export default function SplineScene({ className = "", fallbackHeight = "400px" }
   };
 
   const handleError = () => {
+    console.warn('Spline scene failed to load, showing fallback');
     setHasError(true);
     setShowFallback(true);
     setIsLoading(false);
