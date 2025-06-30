@@ -1,4 +1,3 @@
-const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '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';
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 interface AIResponse {
@@ -10,6 +9,14 @@ interface AIResponse {
 }
 
 export async function callAI(prompt: string, systemPrompt?: string): Promise<string> {
+  const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
+  
+  // If no API key is available, return fallback response immediately
+  if (!OPENROUTER_API_KEY) {
+    console.warn('OpenRouter API key not found, using fallback responses');
+    return getFallbackResponse(prompt);
+  }
+
   try {
     const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
