@@ -10,13 +10,21 @@ interface AIResponse {
 }
 
 export async function callAI(prompt: string, systemPrompt?: string): Promise<string> {
+  const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
+  
+  // If no API key is available, return fallback response immediately
+  if (!OPENROUTER_API_KEY) {
+    console.warn('OpenRouter API key not found, using fallback responses');
+    return getFallbackResponse(prompt);
+  }
+
   try {
     const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://everbloom.app',
+        'HTTP-Referer': window.location.origin,
         'X-Title': 'EverBloom - AI Relationship Nurturer',
       },
       body: JSON.stringify({
@@ -31,13 +39,14 @@ export async function callAI(prompt: string, systemPrompt?: string): Promise<str
     });
 
     if (!response.ok) {
-      throw new Error(`AI API error: ${response.statusText}`);
+      console.warn(`AI API error: ${response.statusText}, falling back to local responses`);
+      return getFallbackResponse(prompt);
     }
 
     const data: AIResponse = await response.json();
     return data.choices[0]?.message?.content || getFallbackResponse(prompt);
   } catch (error) {
-    console.error('AI API Error:', error);
+    console.warn('AI API Error, using fallback:', error);
     return getFallbackResponse(prompt);
   }
 }
