@@ -1,4 +1,4 @@
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 interface AIResponse {
