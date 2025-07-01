@@ -150,17 +150,37 @@ export default function Dashboard() {
     { icon: Award, label: "Thoughtful Friend", value: stats.upcomingDates, suffix: " upcoming events" },
   ];
 
-  // Get user's display name
+  // Get user's display name with improved logic
   const getUserDisplayName = () => {
-    if (userProfile?.name) {
-      return userProfile.name;
+    // First priority: user profile name
+    if (userProfile?.name && userProfile.name.trim()) {
+      return userProfile.name.trim();
     }
-    if (user?.user_metadata?.name) {
-      return user.user_metadata.name;
+    
+    // Second priority: user metadata name from auth
+    if (user?.user_metadata?.name && user.user_metadata.name.trim()) {
+      return user.user_metadata.name.trim();
     }
+    
+    // Third priority: extract name from email (better logic)
     if (user?.email) {
-      return user.email.split('@')[0];
+      const emailPrefix = user.email.split('@')[0];
+      // Convert common email patterns to readable names
+      const cleanName = emailPrefix
+        .replace(/[._-]/g, ' ') // Replace dots, underscores, dashes with spaces
+        .replace(/\d+/g, '') // Remove numbers
+        .trim()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+        .join(' ');
+      
+      // If we get a meaningful name, use it, otherwise use a fallback
+      if (cleanName && cleanName.length > 1 && cleanName !== 'User') {
+        return cleanName;
+      }
     }
+    
+    // Fallback
     return 'Beautiful Soul';
   };
 
