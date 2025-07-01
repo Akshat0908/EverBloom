@@ -2,6 +2,9 @@
 
 EverBloom is a beautiful, AI-powered relationship management application that helps you nurture meaningful connections with personalized suggestions, reminders, and insights.
 
+<img width="1440" alt="Screenshot 2025-07-01 at 12 24 36 PM" src="https://github.com/user-attachments/assets/482ab245-1d8e-4af9-bf41-d5de87c66beb" />
+
+
 ## ✨ Features
 
 - **AI-Powered Insights**: Get personalized suggestions to strengthen your relationships
@@ -12,9 +15,16 @@ EverBloom is a beautiful, AI-powered relationship management application that he
 - **Activity Planning**: Discover meaningful activities to share with loved ones
 - **Beautiful 3D Interface**: Immersive Spline 3D scenes for an engaging experience
 
+
+<img width="1440" alt="Screenshot 2025-07-01 at 12 25 14 PM" src="https://github.com/user-attachments/assets/a22760a0-cf56-42f1-83b0-cec30c654fdf" />
+
 ## 🚀 Live Demo
 
-Visit the live application: [EverBloom on Netlify](https://wondrous-parfait-be4b74.netlify.app)
+Visit the live application: [EverBloom on Vercel](ever-bloom-phi.vercel.app/auth)
+
+<img width="1436" alt="Screenshot 2025-07-01 at 12 28 50 PM" src="https://github.com/user-attachments/assets/5b4d9420-4821-4d29-a5d2-7fc62b5d258f" />
+
+
 
 ## 🛠️ Tech Stack
 
@@ -27,6 +37,9 @@ Visit the live application: [EverBloom on Netlify](https://wondrous-parfait-be4b
 - **Forms**: React Hook Form
 - **Date Handling**: date-fns
 - **Notifications**: React Hot Toast
+
+  <img width="1440" alt="Screenshot 2025-07-01 at 12 27 33 PM" src="https://github.com/user-attachments/assets/dd63e323-34e6-4a86-98f6-8fb07e3d2e9a" />
+
 
 ## 📦 Installation
 
@@ -86,11 +99,11 @@ EverBloom follows a "love theme" design with:
 
 ## 🚀 Deployment
 
-The application is automatically deployed to Netlify. To deploy your own instance:
+The application is automatically deployed to Vercel. To deploy your own instance:
 
 1. Fork this repository
-2. Connect your GitHub repository to Netlify
-3. Set up environment variables in Netlify dashboard
+2. Connect your GitHub repository to Vercel
+3. Set up environment variables in Vercel dashboard
 4. Deploy!
 
 ## 🤝 Contributing
