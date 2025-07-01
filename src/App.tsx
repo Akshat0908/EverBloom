@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { SubscriptionProvider } from './contexts/SubscriptionContext';
 import AuthForm from './components/AuthForm';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
@@ -62,16 +63,18 @@ function AppContent() {
           path="/*"
           element={
             <ProtectedRoute>
-              <Layout>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/relationships" element={<Relationships />} />
-                  <Route path="/ai-studio" element={<AIStudio />} />
-                  <Route path="/messages" element={<Messages />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </Layout>
+              <SubscriptionProvider>
+                <Layout>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/relationships" element={<Relationships />} />
+                    <Route path="/ai-studio" element={<AIStudio />} />
+                    <Route path="/messages" element={<Messages />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </Layout>
+              </SubscriptionProvider>
             </ProtectedRoute>
           }
         />
