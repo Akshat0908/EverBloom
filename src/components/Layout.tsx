@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Heart, Home, Users, MessageCircle, Settings, LogOut, Sparkles, User, Bell, Menu, X, Crown } from 'lucide-react';
+import { Heart, Home, Users, MessageCircle, Settings, LogOut, Sparkles, User, Bell, Menu, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useSubscription } from '../contexts/SubscriptionContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import NotificationCenter from './NotificationCenter';
-import SubscriptionModal from './SubscriptionModal';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,11 +11,9 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const { user, signOut, userProfile } = useAuth();
-  const { subscriptionTier } = useSubscription();
   const location = useLocation();
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -41,25 +37,6 @@ export default function Layout({ children }: LayoutProps) {
       return location.pathname === '/';
     }
     return location.pathname.startsWith(path);
-  };
-
-  const getSubscriptionBadge = () => {
-    if (subscriptionTier === 'PLATINUM') {
-      return (
-        <div className="flex items-center space-x-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-2 py-1 rounded-full text-xs font-medium">
-          <Crown className="h-3 w-3" />
-          <span>Platinum</span>
-        </div>
-      );
-    } else if (subscriptionTier === 'PREMIUM') {
-      return (
-        <div className="flex items-center space-x-1 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-2 py-1 rounded-full text-xs font-medium">
-          <Sparkles className="h-3 w-3" />
-          <span>Premium</span>
-        </div>
-      );
-    }
-    return null;
   };
 
   return (
@@ -114,22 +91,6 @@ export default function Layout({ children }: LayoutProps) {
 
             {/* User Menu */}
             <div className="flex items-center space-x-4">
-              {/* Subscription Badge */}
-              {getSubscriptionBadge()}
-
-              {/* Upgrade Button for Free Users */}
-              {subscriptionTier === 'FREE' && (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowSubscriptionModal(true)}
-                  className="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:from-primary-600 hover:to-primary-700 transition-all shadow-lg"
-                >
-                  <Crown className="h-4 w-4" />
-                  <span>Upgrade</span>
-                </motion.button>
-              )}
-
               {/* Notification Bell */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -155,11 +116,9 @@ export default function Layout({ children }: LayoutProps) {
                   <p className="text-sm font-medium text-gray-700">
                     {userProfile?.name || user?.email || 'User'}
                   </p>
-                  <div className="flex items-center space-x-2">
-                    <p className="text-xs text-gray-500 capitalize">
-                      {subscriptionTier.toLowerCase()} plan
-                    </p>
-                  </div>
+                  <p className="text-xs text-gray-500 capitalize">
+                    {userProfile?.subscription_status?.toLowerCase() || 'free'} plan
+                  </p>
                 </div>
               </div>
 
@@ -230,20 +189,6 @@ export default function Layout({ children }: LayoutProps) {
                   );
                 })}
                 
-                {/* Mobile Upgrade Button */}
-                {subscriptionTier === 'FREE' && (
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      setShowSubscriptionModal(true);
-                    }}
-                    className="w-full flex items-center space-x-3 py-3 px-4 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium"
-                  >
-                    <Crown className="h-5 w-5" />
-                    <span>Upgrade to Premium</span>
-                  </button>
-                )}
-                
                 <div className="border-t border-gray-200 pt-4 mt-4">
                   <Link
                     to="/settings"
@@ -280,12 +225,6 @@ export default function Layout({ children }: LayoutProps) {
       <NotificationCenter 
         isOpen={showNotifications} 
         onClose={() => setShowNotifications(false)} 
-      />
-
-      {/* Subscription Modal */}
-      <SubscriptionModal
-        isOpen={showSubscriptionModal}
-        onClose={() => setShowSubscriptionModal(false)}
       />
     </div>
   );
